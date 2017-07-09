@@ -3,75 +3,60 @@
 //  3 4 args
 // ) end function call
 
-const tree = {nodes: []};
+function startFunction(token) {
+  if (token.startsWith("(")) {
+    return ["(", token.slice(1)];
+  }
+  return [token];
+}
+
+function endFunction(tokens) {
+  let nodes = [];
+  tokens.forEach(token => {
+    nodes = nodes.concat(token.split(")").map(x => (x ? x : ")")));
+  });
+
+  return nodes;
+}
+
+function lex(lisp) {
+  const tree = [];
+  lisp.split(/\s/g).map(startFunction).map(endFunction).forEach(subArray => {
+    subArray.forEach(value => {
+      tree.push(value);
+    });
+  });
+  return tree;
+}
+
+exports.lex = lex;
 
 function syntaxError(message) {
   return new Error(`Invalid syntax: ${message}`);
 }
 
-function currentNode(tree) {
-  return tree.nodes[tree.nodes.length - 1];
-}
-
-function argument(tree, char) {
-  const node = currentNode(tree);
-  let arg = node.args[node.args.length - 1];
-  if (!arg) {
-    arg = {value: "", type: "number"};
-    node.args.push(arg);
-  }
-  switch (char) {
-    case " ":
-      if (!arg.value) {
-        throw syntaxError("expecting argument value");
-      }
-      return argument
-    case ")":
-      if (!arg.value) {
-        throw syntaxError("expecting argument");
-      }
-      if (!node.args.length) {
-        throw syntaxError("expecting argument, found close function");
-      }
-    case "(":
-      return openFunction(tree, char);
-    case " ":
-      break;
-    default:
-  }
-  // arg.value += char;
-  // return argument;
-}
-
-function functionName(tree, char) {
-  const node = currentNode(tree);
-  if ([" ", ")"].includes(char)) {
-    if (!node.name.length) {
-      throw syntaxError("expecting function name");
+function parse(tokens) {
+  // input: ["(", "+", "0", "1", ")"]
+  // output: ["+", "0", "1"]
+  let nodes = [];
+  for (var i = 1; i < tokens.length; i++) {
+    const token = tokens[i];
+    switch (token) {
+      case "(":
+        nodes.push(parse(tokens.slice(i)));
+      case ")":
+        return nodes;
+      default:
+        nodes.push(token);
     }
-    return argument;
   }
-  tree.nodes[tree.nodes.length - 1].name += char;
-  return functionName;
+  return nodes;
 }
-
-function openFunction(tree, char) {
-  if (char !== "(") {
-    throw new Error("Invalid syntax: expecting open function '('");
-  }
-  tree.nodes.push({type: "function", name: "", args: []});
-  return functionName;
-}
+exports.parse = parse;
 
 if (require.main === module) {
-  let next = openFunction;
-  for (let char of process.argv[2]) {
-    console.log("char: ", char); // fixme
-    try {
-      next = next(tree, char);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-  console.log(JSON.stringify(tree, null, 2));
+  const tokens = lex(process.argv[2]);
+  console.log(JSON.stringify(tokens, null, 2));
+  const tree = parse(tokens);
+  console.log("----\n", JSON.stringify(tree, null, 2));
 }

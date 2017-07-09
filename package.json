@@ -1,0 +1,25 @@
+{
+  "name": "chapped-lisp",
+  "version": "1.0.0",
+  "description": "Interpretted for a very basic lisp dialect",
+  "main": "chapped-lisp.js",
+  "scripts": {
+    "test": "tap *-tap.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/focusaurus/chapped-lisp.git"
+  },
+  "keywords": [
+    "lisp"
+  ],
+  "author": "Peter Lyons <pete@peterlyons.com> (http://peterlyons.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/focusaurus/chapped-lisp/issues"
+  },
+  "homepage": "https://github.com/focusaurus/chapped-lisp#readme",
+  "devDependencies": {
+    "tap": "10.7.0"
+  }
+}
