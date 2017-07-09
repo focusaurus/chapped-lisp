@@ -1,6 +1,6 @@
 "use strict";
-const tap = require("tap");
 const lex = require("./lex");
+const tap = require("tap");
 
 tap.test("lex basic cases", test => {
   tap.same(lex("(+ 0 1)"), ["(", "+", "0", "1", ")"]);

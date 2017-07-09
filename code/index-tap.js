@@ -1,6 +1,6 @@
 "use strict";
-const tap = require("tap");
 const chapped = require("./index");
+const tap = require("tap");
 
 tap.test("full parse basic expression", {skip: false}, test => {
   tap.same(chapped("(one 11 12)"), ["one", "11", "12"]);

@@ -1,6 +1,6 @@
 "use strict";
-const tap = require("tap");
 const parse = require("./parse");
+const tap = require("tap");
 
 tap.test("parseTokens basic flat cases", test => {
   tap.same(parse(["(", "+", "0", "1", ")"]), ["+", "0", "1"]);

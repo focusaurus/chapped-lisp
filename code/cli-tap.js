@@ -22,12 +22,15 @@ tap.test("CLI integration test base case", test => {
   getStream(child.stdout)
     .then(out => {
       ended = true;
-      tap.match(out, `[
+      tap.match(
+        out,
+        `[
   "+",
   1,
   2
 ]
-`);
+`
+      );
       done();
     })
     .catch(error => {
