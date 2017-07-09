@@ -4,7 +4,7 @@ const debug = require("debug")("chapped-lisp");
 
 // Helper function to lex a start function call
 function startFunction(token) {
-  if (token.startsWith("(")) {
+  if (token.startsWith("(") && token.length > 1) {
     return ["(", token.slice(1)];
   }
   return [token];
@@ -14,9 +14,13 @@ function startFunction(token) {
 function endFunction(tokens) {
   let nodes = [];
   tokens.forEach(token => {
-    nodes = nodes.concat(token.split(")").map(x => x || ")"));
+    // todo find a cleaner implementation
+    if (token === ")") {
+      nodes = nodes.concat([token]);
+    } else {
+      nodes = nodes.concat(token.split(")").map(x => x || ")"));
+    }
   });
-
   return nodes;
 }
 
@@ -35,8 +39,14 @@ function endFunction(tokens) {
 function lex(lisp) {
   const tokens = [];
   lisp
+    .replace(/\s+/g, " ") // combine multiple consecutive white space chars
     .split(/\s/g) // split on whitespace
+    .filter(x => x) // remove empty strings (were spaces before split)
     .map(startFunction) // break "(name" tokens into ["(", "name"]
+    // .map(x => {
+    //   // process.stdout.write("before endFunction <" + x + ">\n");
+    //   return x;
+    // })
     .map(endFunction) // break "4)))" into ["4", ")", ")", ")"]
     .forEach(subArray => {
       subArray.forEach(value => {
@@ -76,8 +86,11 @@ function parseTokens(tokens, depth = 0) {
       case ")":
         tokens.shift(); // consume the close paren, we're done
         return nodes;
-      default:
-        nodes.push(tokens.shift()); // consume the close paren, we're done
+      default: {
+        const token = tokens.shift(); // consume the close paren, we're done
+        const value = parseFloat(token);
+        nodes.push(isNaN(value) ? token : value);
+      }
     }
   }
   throw syntaxError("missing closing paren");

@@ -8,19 +8,50 @@ tap.test("lex basic cases", test => {
   test.end();
 });
 
+tap.test("lex basic cases whitespace loose", test => {
+  tap.same(lisp.lex("   (+\t0\n1 )  \n"), ["(", "+", "0", "1", ")"]);
+  tap.same(lisp.lex("\n\r\n( frog  9  8  7  ) "), [
+    "(",
+    "frog",
+    "9",
+    "8",
+    "7",
+    ")"
+  ]);
+  test.end();
+});
+
+tap.test("lex nested case", test => {
+  tap.same(lisp.lex("(one 11 (two 21 22 23 )12 13)"), [
+    "(",
+    "one",
+    "11",
+    "(",
+    "two",
+    "21",
+    "22",
+    "23",
+    ")",
+    "12",
+    "13",
+    ")"
+  ]);
+  test.end();
+});
+
 tap.test("parseTokens basic flat cases", test => {
   tap.same(lisp.parseTokens(["(", "+", "0", "1", ")"]), ["+", "0", "1"]);
   tap.same(lisp.parseTokens(["(", "*", "42", "42", "666", ")"]), [
     "*",
-    "42",
-    "42",
-    "666"
+    42,
+    42,
+    666
   ]);
   tap.same(lisp.parseTokens(["(", "max", "42", "42", "666", ")"]), [
     "max",
-    "42",
-    "42",
-    "666"
+    42,
+    42,
+    666
   ]);
   test.end();
 });
@@ -33,15 +64,15 @@ tap.test("parseTokens nested cases", test => {
   ]);
   tap.same(lisp.parseTokens(["(", "*", "42", "42", "666", ")"]), [
     "*",
-    "42",
-    "42",
-    "666"
+    42,
+    42,
+    666
   ]);
   tap.same(lisp.parseTokens(["(", "max", "42", "42", "666", ")"]), [
     "max",
-    "42",
-    "42",
-    "666"
+    42,
+    42,
+    666
   ]);
   test.end();
 });
@@ -57,7 +88,7 @@ tap.test("parseTokens mixed values and sub-expressions", test => {
 tap.test("parseTokens a deeper tree", test => {
   tap.same(
     lisp.parseTokens(["(", "+", "11", "(", "-", "21", "22", ")", "12", ")"]),
-    ["+", "11", ["-", "21", "22"], "12"]
+    ["+", 11, ["-", 21, 22], 12]
   );
   test.end();
 });
