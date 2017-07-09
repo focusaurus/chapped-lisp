@@ -27,6 +27,7 @@ console.log(chapped("(+ 42 43)"));
     - nvm recommended
   - `npm install`
 - Run all tests: `npm test`
+- Analyze code coverage: `npm run coverage`
 - Run some tests: `tap code/cli-tap.js code/lex-tap.js`
 - Run lint: `npm run lint`
 - Run the main CLI: `node ./code/cli.js '(+ 1 2)'`
