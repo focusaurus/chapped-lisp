@@ -5,18 +5,31 @@ function syntaxError(message) {
 }
 
 function parseScalar(scalarString) {
-  // Only supports numbers currently, but in future could add booleans, strings
+  // Only supports numbers currently,
+  // but in future could add booleans and strings
   const value = parseFloat(scalarString);
   return isNaN(value) ? scalarString : value;
 }
 
-// Parse is a recursive function to take a flat list of tokens and turn it
-// into a nested syntax tree. The recursion is how the flat becomes nested.
+/**
+ * Convert a flast list of syntax tokens to a nested abstract syntax tree (AST).
+ *
+ * The AST is modeled as nested arrays.
+ * This function transforms flat to nested by way of recursion.
+ *
+ * ## Samples
+ * - input: ["(", "+", "0", "1", ")"]
+ * - output: ["+", "0", "1"]
+ * ----
+ * - input: ["(", "+", "0", "(", "-", "4", "3")")"]
+ * - output: ["+", "0", ["-", "4", "3"]]
+ *
+ * @param {String[]} tokens Chapped Lisp language tokens from the lexer
+ *
+ * @return {Array[]} AST. Example: ["+", "0", "1"]
+ */
 function parse(tokens, depth = 0) {
-  // input: ["(", "+", "0", "1", ")"]
-  // output: ["+", "0", "1"]
-  // input: ["(", "+", "0", "(", "-", "4", "3")")"]
-  // output: ["+", "0", ["-", "4", "3"]]
+
   const nodes = [];
   while (tokens.length) {
     switch (tokens[0]) {
