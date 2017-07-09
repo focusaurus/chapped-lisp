@@ -1,6 +1,5 @@
-#!/usr/bin/env node
 "use strict";
-const debug = require("debug")("chapped-lisp");
+const debug = require("debug")("chapped-lisp:lex");
 
 // Helper function to lex a start function call
 function startFunction(token) {
@@ -58,54 +57,4 @@ function lex(lisp) {
   return tokens;
 }
 
-exports.lex = lex;
-
-function syntaxError(message) {
-  return new Error(`Invalid syntax: ${message}`);
-}
-
-// Parse is a recursive function to take a flat list of tokens and turn it
-// into a nested syntax tree. The recursion is how the flat becomes nested.
-function parseTokens(tokens, depth = 0) {
-  // input: ["(", "+", "0", "1", ")"]
-  // output: ["+", "0", "1"]
-  // input: ["(", "+", "0", "(", "-", "4", "3")")"]
-  // output: ["+", "0", ["-", "4", "3"]]
-  const nodes = [];
-  while (tokens.length) {
-    switch (tokens[0]) {
-      case "(":
-        if (!nodes.length) {
-          // first open paren, start an array
-          tokens.shift(); // consume the open paren
-        } else {
-          // nested expression, leave the open paren there and recur
-          nodes.push(parseTokens(tokens, depth + 1));
-        }
-        break;
-      case ")":
-        tokens.shift(); // consume the close paren, we're done
-        return nodes;
-      default: {
-        const token = tokens.shift(); // consume the close paren, we're done
-        const value = parseFloat(token);
-        nodes.push(isNaN(value) ? token : value);
-      }
-    }
-  }
-  throw syntaxError("missing closing paren");
-}
-exports.parseTokens = parseTokens;
-
-function parse(chappedLispSource) {
-  return parseTokens(lex(chappedLispSource));
-}
-
-// main exported API
-exports.parse = parse;
-
-/* istanbul ignore if */
-if (require.main === module) {
-  const tree = parse(process.argv[2]);
-  console.log(JSON.stringify(tree, null, 2));
-}
+module.exports = lex;
