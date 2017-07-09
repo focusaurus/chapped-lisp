@@ -34,18 +34,30 @@ function endFunction(tokens) {
   return nodes;
 }
 
+// Use this to debug the lex chain of map/filter calls as needed
+// It has no effect on the code, only the side effect of printing
+// intermediate values as they are processed by the chain
+/*
+function debugTap(value) {
+  process.stdout.write(`before endFunction <${value}>\n`);
+  return value;
+}
+*/
+
 /**
  * Convert a string of chapped lisp source code to an array of tokens.
  *
- * Lex takes a string of chapped lisp source code
- * and converts it into an array of tokens
  * It mostly deals with whitespace and parens vs other values
  *
- * Given "(+ 3 4)"
- * We get ["(", "+", "3", "4", ")"] as the output token list
- * Given (tag 11 (bag 21 22) 12)
- * we get [ "(", "tag", "11", "(", "bag", "21", "22", ")", "12", ")" ]
-*/
+ * ## Examples
+ * - input: "(+ 3 4)"
+ * - output: ["(", "+", "3", "4", ")"]
+ * ----
+ * - input:  (tag 11 (bag 21 22) 12)
+ * - output: [ "(", "tag", "11", "(", "bag", "21", "22", ")", "12", ")" ]
+ * @param {String} lisp The chapped lisp source code string
+ * @return {String[]} Flat array of lexical tokens
+ */
 function lex(lisp) {
   const tokens = [];
   lisp
@@ -53,10 +65,7 @@ function lex(lisp) {
     .split(/\s/g) // split on whitespace
     .filter(x => x) // remove empty strings (were spaces before split)
     .map(startFunction) // break "(name" tokens into ["(", "name"]
-    // .map(x => {
-    //   // process.stdout.write("before endFunction <" + x + ">\n");
-    //   return x;
-    // })
+    // .map(debugTap) // Use this for debugging intermediate values
     .map(endFunction) // break "4)))" into ["4", ")", ")", ")"]
     .forEach(subArray => {
       subArray.forEach(value => {
