@@ -13,12 +13,23 @@ function startFunction(token) {
 function endFunction(tokens) {
   let nodes = [];
   tokens.forEach(token => {
-    // todo find a cleaner implementation
-    if (token === ")") {
-      nodes = nodes.concat([token]);
-    } else {
-      nodes = nodes.concat(token.split(")").map(x => x || ")"));
+    let splits = token.split(")").map(x => x || ")");
+
+    if (!token.match(/[^)]/)) {
+      // Special case. Token is entirely close parens with no other tokens.
+      // The split will have an extra close paren item we need to omit.
+      // ")" -> [")", ")"]
+      // ")))" -> [")", ")", ")", ")"]
+      splits = splits.slice(1);
     }
+    // (Implied else)
+    // Token has at least 1 non-close-paren char.
+    // The split works correctly as is.
+    // "42)" -> ["42", ")"]
+    // "43)))" -> ["43", ")", ")" ,")"]
+    // ")17" -> [")", "17"]
+
+    nodes = nodes.concat(splits);
   });
   return nodes;
 }
