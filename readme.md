@@ -4,6 +4,10 @@
 
 This is a basic lisp interpreter project done as part of an application to The Recurse Center.
 
+## Gaping Holes
+
+There is zero error handling of invalid syntax and zero code to generate helpful error messages so far. If you provide invalid lisp syntax, at the moment, **You're Gonna Have a Bad Time™**.
+
 ## CLI Usage
 
 - `node ./code/cli.js '(+ 1 2)'`
