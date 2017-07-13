@@ -19,10 +19,10 @@ function parseScalar(scalarString) {
  *
  * ## Samples
  * - input: ["(", "+", "0", "1", ")"]
- * - output: ["+", "0", "1"]
+ * - output: ["+", 0, 1]
  * ----
  * - input: ["(", "+", "0", "(", "-", "4", "3")")"]
- * - output: ["+", "0", ["-", "4", "3"]]
+ * - output: ["+", 0, ["-", 4, 3]]
  *
  * @param {String[]} tokens Chapped Lisp language tokens from the lexer
  *
