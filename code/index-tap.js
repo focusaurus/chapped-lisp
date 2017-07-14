@@ -2,27 +2,40 @@
 const chapped = require("./index");
 const tap = require("tap");
 
-tap.test("full parse basic expression", {skip: false}, test => {
-  tap.same(chapped("(one 11 12)"), ["one", "11", "12"]);
-  test.end();
-});
+function define(description, lisp, value) {
+  return {description, lisp, value};
+}
 
-tap.test("full parse medium complex nesting", {skip: false}, test => {
-  tap.same(chapped("(one 11 12 (two 22 (three 33 34 35) 23) 13)"), [
-    "one",
-    "11",
-    "12",
-    ["two", "22", ["three", "33", "34", "35"], "23"],
-    "13"
-  ]);
-  test.end();
-});
+const testConfigs = [
+  define("basic add", "(+ 11 12)", 23),
+  define("basic add whitespace", " ( +   11  12\t)", 23),
+  define("medium complex nesting", "(+ 1 1 (+ 2 (+ 5 5 5) 2) 3)", 24)
+];
 
-tap.test("syntax error: missing closing paren", {skip: false}, test => {
-  try {
-    chapped("(add 1 2");
-    tap.fail("Expected syntax error");
-  } catch (error) {
+testConfigs.forEach(config => {
+  tap.test(config.description, {skip: false}, test => {
+    tap.same(chapped(config.lisp), config.value);
     test.end();
-  }
+  });
+});
+
+function fail(description, lisp, message) {
+  return {description, lisp, message};
+}
+
+const errorConfigs = [
+  fail("syntax error: missing closing paren", "(+ 1 2", "syntax error"),
+  fail("name error: unknown function", "(nosuchfn 1 2)", "name error")
+];
+
+errorConfigs.forEach(config => {
+  tap.test(config.description, {skip: false}, test => {
+    try {
+      chapped(config.lisp);
+      tap.fail("Expected exception");
+    } catch (error) {
+      tap.match(error.message, config.message);
+      test.end();
+    }
+  });
 });

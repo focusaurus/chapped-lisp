@@ -6,7 +6,7 @@ const tap = require("tap");
 const cliPath = __filename.replace("-tap", "");
 
 tap.test("CLI integration test base case", test => {
-  const child = childProcess.spawn("node", [cliPath, "(+ 1 2)"]);
+  const child = childProcess.spawn("node", [cliPath, "(+ 1 (+ 7 23))"]);
   let exited = false;
   let ended = false;
   function done() {
@@ -22,15 +22,7 @@ tap.test("CLI integration test base case", test => {
   getStream(child.stdout)
     .then(out => {
       ended = true;
-      tap.match(
-        out,
-        `[
-  "+",
-  1,
-  2
-]
-`
-      );
+      tap.match(out, "31");
       done();
     })
     .catch(error => {

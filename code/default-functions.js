@@ -1,7 +1,7 @@
 "use strict";
 
 function add(...numbers) {
-  return numbers.reduce((numberA, numberB) => numberA + numberB, 0);
+  return numbers.reduce((subTotal, value) => subTotal + value, 0);
 }
 
 exports.add = add;

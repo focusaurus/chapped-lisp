@@ -1,7 +1,7 @@
 "use strict";
 
 function syntaxError(message) {
-  return new Error(`Invalid syntax: ${message}`);
+  return new Error(`syntax error: ${message}`);
 }
 
 function parseScalar(scalarString) {
