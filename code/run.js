@@ -1,9 +1,9 @@
 "use strict";
-const defaultFunctions = require("./default-functions");
+const library = require("./library");
 
 function run(lispAst) {
   const name = lispAst[0];
-  const toCall = defaultFunctions[name];
+  const toCall = library[name];
   if (!toCall) {
     throw new Error(`name error: no function named '${name}'`);
   }
