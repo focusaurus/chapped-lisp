@@ -9,6 +9,11 @@ function define(description, lisp, value) {
 const testConfigs = [
   define("basic add", "(+ 11 12)", 23),
   define("basic add whitespace", " ( +   11  12\t)", 23),
+  define(
+    "add and substract with whitespace",
+    " ( +   11  ( subtract 10 7 )\t)",
+    14
+  ),
   define("medium complex nesting", "(+ 1 1 (+ 2 (+ 5 5 5) 2) 3)", 24)
 ];
 
