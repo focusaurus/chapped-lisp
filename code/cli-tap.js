@@ -15,19 +15,19 @@ tap.test("CLI integration test base case", test => {
     }
   }
   child.on("exit", code => {
-    tap.match(code, 0, "should exit zero success");
+    test.match(code, 0, "should exit zero success");
     exited = true;
     done();
   });
   getStream(child.stdout)
     .then(out => {
       ended = true;
-      tap.match(out, "31");
+      test.match(out, "31");
       done();
     })
     .catch(error => {
       ended = true;
-      tap.error(error);
+      test.error(error);
       done();
     });
 });

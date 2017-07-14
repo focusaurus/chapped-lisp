@@ -14,7 +14,7 @@ const testConfigs = [
 
 testConfigs.forEach(config => {
   tap.test(config.description, {skip: false}, test => {
-    tap.same(chapped(config.lisp), config.value);
+    test.same(chapped(config.lisp), config.value);
     test.end();
   });
 });
@@ -32,9 +32,9 @@ errorConfigs.forEach(config => {
   tap.test(config.description, {skip: false}, test => {
     try {
       chapped(config.lisp);
-      tap.fail("Expected exception");
+      test.fail("Expected exception");
     } catch (error) {
-      tap.match(error.message, config.message);
+      test.match(error.message, config.message);
       test.end();
     }
   });
