@@ -17,3 +17,7 @@ function subtract(...numbers) {
 }
 exports.subtract = subtract;
 exports["-"] = subtract;
+
+// These built-in Math functions "just work" as lisp functions
+exports.max = Math.max;
+exports.min = Math.min;
