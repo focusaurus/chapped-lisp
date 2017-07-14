@@ -6,7 +6,7 @@ This is a basic lisp interpreter project done as part of an application to The R
 
 ## Gaping Holes
 
-There is zero error handling of invalid syntax and zero code to generate helpful error messages so far. If you provide invalid lisp syntax, at the moment, **You're Gonna Have a Bad Time™**.
+There is near-zero error handling of invalid syntax and zero code to generate helpful error messages so far. If you provide invalid lisp syntax, at the moment, **You're Gonna Have a Bad Time™**.
 
 ## CLI Usage
 
@@ -17,6 +17,22 @@ There is zero error handling of invalid syntax and zero code to generate helpful
 ```js
 const chapped = require("chapped-lisp");
 console.log(chapped("(+ 42 43)"));
+```
+
+## Command Line Usage
+
+```
+npm install chapped-lisp
+npx chapped-lisp '(max 43 42)'
+# prints 43
+```
+
+----
+For npm prior to v5.2:
+
+```
+npm install chapped-lisp
+$(npm bin)/chapped-lisp '(max 43 42)'
 ```
 
 ## Developer How To...

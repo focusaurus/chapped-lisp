@@ -14,7 +14,8 @@ const testConfigs = [
     " ( +   11  ( subtract 10 7 )\t)",
     14
   ),
-  define("medium complex nesting", "(+ 1 1 (+ 2 (+ 5 5 5) 2) 3)", 24)
+  define("medium complex nesting", "(+ 1 1 (+ 2 (+ 5 5 5) 2) 3)", 24),
+  define("function soup", "(max (+ 1 13) (- 25 4))", 21),
 ];
 
 testConfigs.forEach(config => {
